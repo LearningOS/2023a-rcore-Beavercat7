@@ -24,6 +24,7 @@ pub trait QEMUExit {
 
 /// RISCV64 configuration
 pub struct RISCV64 {
+//sifive_test映射设备的地址'
     /// Address of the sifive_test mapped device.
     addr: u64,
 }
