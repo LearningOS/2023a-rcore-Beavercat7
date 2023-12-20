@@ -40,6 +40,7 @@ global_asm!(include_str!("entry.asm"));
 使用 (sbss as usize..ebss as usize) 创建了一个范围（Range），表示从 BSS 段的起始地址到结束地址的范围。
 使用 .for_each() 方法遍历该范围内的每一个地址。
 在遍历过程中，对每个地址执行 unsafe { (a as *mut u8).write_volatile(0) } 操作。这行代码的作用是将地址对应的内存内容设置为零值（0），这里使用了 write_volatile 方法是因为操作系统可能会对这块内存进行优化或缓存，write_volatile 会告知编译器不要进行任何优化。
+这些声明实际上并不是函数的声明，而是对全局符号（Global Symbol）的声明。
 */
 pub fn clear_bss() {
     extern "C" {
@@ -53,6 +54,8 @@ pub fn clear_bss() {
 #[no_mangle]
 pub fn rust_main() -> ! {
 //标注操作系统中各个内存段的边界、起始地址或特定位置。
+//不是为了实际调用函数，而是为了告诉编译器在链接时这些符号会在外部某处定义，以便正确地进行符号解析和链接。/
+//声明在外部定义的符号以后,下面就可以使用这些符号了。
     extern "C" {
         fn stext(); // begin addr of text segment 文本段的起始地址
         fn etext(); // end addr of text segment 文本段的结束地址
