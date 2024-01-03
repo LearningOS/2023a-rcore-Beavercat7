@@ -4,11 +4,11 @@ use riscv::register::sstatus::{self, Sstatus, SPP};
 #[derive(Debug)]
 /// trap context structure containing sstatus, sepc and registers
 pub struct TrapContext {
-    /// General-Purpose Register x0-31
+    /// General-Purpose Register x0-31 通用寄存器
     pub x: [usize; 32],
-    /// Supervisor Status Register
+    /// Supervisor Status Register 该寄存器的SSP字段保存当前是U/S特权级
     pub sstatus: Sstatus,
-    /// Supervisor Exception Program Counter
+    /// Supervisor Exception Program Counter trap处理函数执行完以后要执行的下一条指令
     pub sepc: usize,
 }
 

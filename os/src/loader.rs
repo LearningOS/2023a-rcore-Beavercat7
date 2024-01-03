@@ -49,16 +49,19 @@ impl UserStack {
 }
 
 /// Get base address of app i.
+// fn get_base_i(app_id: usize) -> usize {
+//     APP_BASE_ADDRESS + app_id * APP_SIZE_LIMIT
+// }
 fn get_base_i(app_id: usize) -> usize {
     APP_BASE_ADDRESS + app_id * APP_SIZE_LIMIT
 }
 
 /// Get the total number of applications.
-pub fn get_num_app() -> usize {
-    extern "C" {
+pub fn get_num_app() -> usize{
+    extern  "C"{
         fn _num_app();
     }
-    unsafe { (_num_app as usize as *const usize).read_volatile() }
+    unsafe { (_num_app as usize as *const  usize).read_volatile()}
 }
 
 /// Load nth user app at
@@ -74,7 +77,7 @@ pub fn load_apps() {
     unsafe {
         asm!("fence.i");
     }
-    // load apps
+    //load apps
     for i in 0..num_app {
         let base_i = get_base_i(i);
         // clear region
@@ -87,6 +90,11 @@ pub fn load_apps() {
         let dst = unsafe { core::slice::from_raw_parts_mut(base_i as *mut u8, src.len()) };
         dst.copy_from_slice(src);
     }
+    // for i in 0..num_app {
+    //     let base_i = get_base_i(i);
+    //     //清空区域
+    //     (base_i..base_i + App)
+    // }
 }
 
 /// get app info with entry and sp and save `TrapContext` in kernel stack
